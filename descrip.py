@@ -20,14 +20,28 @@ def high_frequency_description(cxt):
     r4 = trans.groupby(['ds', 'code', 'time_flag']).rquar.sum().sort_index().reset_index(drop=True)
     ri = trans.groupby(['ds', 'code', 'time_flag']).rsqr_nega.sum().sort_index().reset_index(drop=True)
     skew = (r3 * (N ** 0.5) / r2 ** 1.5).fillna(0)
-    kurt = (r4 * N / r2 ** 2).fillna(0)
+    kurt = (r4 * (N) / r2 ** 2).fillna(0)
     downward_ratio = (ri * (N ** 0.5) / r2).fillna(0)
     res['skew'] = skew
     res['kurt'] = kurt
     res['downward_ratio'] = downward_ratio
+    volsum = trans.groupby(['code', 'time_flag']).volume.sum().reset_index().rename(columns={'volume': 'vol_sum'})
+    trans = trans.merge(volsum, on=['code', 'time_flag'], how='left').sort_values(['ds', 'code', 'time_flag'])
+    trans['vol_ratio'] = trans.volume / trans.vol_sum
+    v1 = trans.groupby(['code', 'time_flag']).price.var().sort_index()
+    v2 = trans.groupby(['code', 'time_flag']).vol_ratio.var().sort_index()
+    n = trans.groupby(['code', 'time_flag']).vol_ratio.count().sort_index()
+    m1 = trans.groupby(['code', 'time_flag']).price.mean().sort_index()
+    m2 = trans.groupby(['code', 'time_flag']).vol_ratio.mean().sort_index()
+    trans['pxv'] = trans.price * trans.vol_ratio
+    m3 = trans.groupby(['code', 'time_flag']).pxv.mean().sort_index()
+    cor = ((n / (n - 1)) * (m3 - m1 * m2) / (v1 * v2) ** 0.5).fillna(0).sort_index()
+    cor = cor.reset_index().rename(columns={0: 'hft_corr'})
+    cor[(cor.hft_corr > 1) | (cor.hft_corr < -1)] = 0
+    res = res.merge(cor, on=['code', 'time_flag'], how='left')
     return res
 
 
 pipeline = HftPipeline('trans', include_trans=True)
 pipeline.add_block_step(high_frequency_description)
-pipeline.gen_factors(["vola", "skew", "kurt", "downward_ratio"])
+pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "downward_ratio"])
