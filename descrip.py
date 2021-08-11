@@ -1,4 +1,3 @@
-import cudf
 from hft_signal_maker.hft_pipeline import HftPipeline
 
 
@@ -21,7 +20,7 @@ def high_frequency_description(cxt):
     r4 = trans.groupby(['ds', 'code', 'time_flag']).rquar.sum().sort_index().reset_index(drop=True)
     ri = trans.groupby(['ds', 'code', 'time_flag']).rsqr_nega.sum().sort_index().reset_index(drop=True)
     skew = (r3 * (N ** 0.5) / r2 ** 1.5).fillna(0)
-    kurt = (r4 * (N) / r2 ** 2).fillna(0)
+    kurt = (r4 * N / r2 ** 2).fillna(0)
     downward_ratio = (ri * (N ** 0.5) / r2).fillna(0)
     res['skew'] = skew
     res['kurt'] = kurt
