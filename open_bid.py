@@ -1,9 +1,13 @@
+import sys
+sys.path.append('/mnt/lustre/app/qllib')
+
+
 import cudf
 from hft_signal_maker.hft_pipeline import HftPipeline
 
 
 def open_bid(cxt):
-    trans = cxt.get_trans(only_trade_time=True)
+    trans = cxt.get_trans()
     trans = trans[(trans.time >= 93000000) & (trans.time <= 100000000) & (trans.transType == 1)]
     trans['amount'] = trans.price * trans.volume
     amount = trans.groupby(['code', 'bsFlag', 'time_flag']).amount.sum()
@@ -27,10 +31,19 @@ def open_bid(cxt):
     tensity = (diff.groupby('code').amount.mean() / diff.groupby('code').amount.std()).reset_index()
     tensity.columns = ['code', 'open_bid_tensity']
     res = ratio.merge(tensity, on='code', how='left')
-    res['time_flag'] = '9:30-10:00'
+    res['time_flag'] = 100000
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('ti6_open_bid', include_trans=True)
 pipeline.add_block_step(open_bid)
 pipeline.gen_factors(["open_bid_ratio", "open_bid_tensity"])
+
+
+if __name__ == '__main__':
+    import cupy
+    cupy.cuda.Device(5).use()
+    res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8,
+                       target_dir='/mnt/lustre/home/lgj/data')
+    print(res)
+
