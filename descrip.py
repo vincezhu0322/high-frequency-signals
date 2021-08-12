@@ -1,3 +1,7 @@
+import sys
+sys.path.append('/mnt/lustre/app/qllib')
+
+
 from hft_signal_maker.hft_pipeline import HftPipeline
 
 
@@ -45,3 +49,11 @@ def high_frequency_description(cxt):
 pipeline = HftPipeline('trans', include_trans=True)
 pipeline.add_block_step(high_frequency_description)
 pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "downward_ratio"])
+
+
+if __name__ == '__main__':
+    import cupy
+    cupy.cuda.Device(5).use()
+    res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8,
+                       target_dir='/mnt/lustre/home/lgj/data')
+    print(res)
