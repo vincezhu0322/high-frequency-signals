@@ -1,6 +1,6 @@
 import sys
-sys.path.append('/mnt/lustre/app/qllib')
 
+sys.path.append('/mnt/lustre/app/qllib')
 
 from hft_signal_maker.hft_pipeline import HftPipeline
 
@@ -43,16 +43,25 @@ def high_frequency_description(cxt):
     cor = cor.reset_index().rename(columns={0: 'hft_corr'})
     cor[(cor.hft_corr > 1) | (cor.hft_corr < -1)] = 0
     res = res.merge(cor, on=['code', 'time_flag'], how='left')
+    trans['anchor'] = 0
+    trans.loc[trans['bsFlag'] == 1, 'anchor'] = 1
+    trans['amount'] = trans.price * trans.volume
+    trans['bid_sqr'] = (trans.amount * trans.anchor) ** 2
+    trans['amount_sqr'] = trans.amount ** 2
+    bid = (trans.groupby(['code', 'time_flag']).bid_sqr.sum() / trans.groupby(
+        ['code', 'time_flag']).amount_sqr.sum()).reset_index()
+    bid.columns = ['code', 'time_flag', 'bid_concentration']
+    res = res.merge(bid, on=['code', 'time_flag'], how='left')
     return res
 
 
 pipeline = HftPipeline('trans', include_trans=True)
 pipeline.add_block_step(high_frequency_description)
-pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "downward_ratio"])
-
+pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "downward_ratio", "bid_concentration"])
 
 if __name__ == '__main__':
     import cupy
+
     cupy.cuda.Device(5).use()
     res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8,
                        target_dir='/mnt/lustre/home/lgj/data')

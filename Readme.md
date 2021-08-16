@@ -20,13 +20,22 @@
 |16.| 高频量价相关性 | $`{1\over{T}}\sum_{n=t}^{t-T+1}corr(Last_{i,j,n}, {Vol_{i,j,n}\over\sum_jVol_{i,j,n}})`$ |④| 量价背离 | 1min| trans |
 |17.| 改进反转 | $`\prod_{n=t}^{t-T+1}{Last_{i,j,n}\over{Last_{i,10:00,n}}}-1`$ |④| 剔除隔夜跳空影响的反转因子 | 1min| snap|
 |18.| 平均单笔流出占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j=1}^NAmt_{i,j,n}\cdot{I_{r<0}}/\sum_{j=1}^NTrdNum_{i,j,n}\cdot{I_{r<0}}\over\sum_{j=1}^NAmt_{i,j,n}/\sum_{j=1}^NTrdNum_{i,j,n}}`$ |④| 捕捉大资金抄底行为 | 1min | snap|
-|19.| 大单推动涨幅 | $`\prod_{n=t}^{t-T+1}\prod(1+r_{i,j,n}\cdot{I_{j\in{IdxSet}}})-1`$, IdxSet=当日平均单笔成交金额最大的30%的K线的序号 |④| 多空博弈激烈，未来反转加强 | 日频|
+|19.| 大单推动涨幅 | $`\prod_{n=t}^{t-T+1}\prod(1+r_{i,j,n}\cdot{I_{j\in{IdxSet}}})-1`$, IdxSet=当日平均单笔成交金额最大的30%的K线的序号 |④| 多空博弈激烈，未来反转加强 | 日频| trans|
 |20.| 开盘净主买占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n}\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$ |④|刻画开盘主动买入|日频| trans|
 |21.| 开盘净主买强度 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{mean_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n})\over{std_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n})}}`$|④|刻画开盘主动买入强度|日频| trans|
 |22.| 开盘买入意愿 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$|④|刻画开盘主动买入意愿|日频|
+|23.| 大单资金净流入率 | $`(\sum_{i=1}^{N}Amt_i\cdot{I_{r_i>0,i\in{IdxSet}}}-\sum_{i=1}^{N}Amt_i\cdot{I_{r_i<0,i\in{IdxSet}}})\over\sum_{i=1}^{N}Amt_i`$ |⑤| 同18|日频|trans|
+|24.| 买盘集中度 | $`\sum_{k=1}^{N_{i,t}}买单成交金额_{i,t,k}^2\over总成交金额_{i,t}^2`$ |⑥|刻画买盘强度|1min|trans|
+|25.| 
 
 ① 海通证券选股因子系列研究（七十三）    
 ② 海通证券选股因子系列研究（七十二）    
 ③ Does Realized Skewness and Kurtosis Predict the
 Cross-Section of Equity Returns?    
-④ 海通证券选股因子系列研究（六十九）
+④ 海通证券选股因子系列研究（六十九）    
+⑤ 海通证券选股因子系列研究（六十六）     
+⑥ 海通证券选股因子系列研究（五十九）     
+⑦   
+⑧   
+⑨   
+⑩   
