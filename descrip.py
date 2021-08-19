@@ -7,9 +7,8 @@ from hft_signal_maker.hft_pipeline import HftPipeline
 
 def high_frequency_description(cxt):
     trans = cxt.get_trans().reset_index()
-    preprice = trans.groupby('code').price.shift(1).reset_index(drop=True)
-    r = ((trans.price - preprice) / trans.price).fillna(0) * 100
-    trans['return'] = r
+    print(trans)
+    r = trans['return']
     trans['rsqr'] = r ** 2
     trans['rcube'] = r ** 3
     trans['rquar'] = r ** 4
@@ -63,6 +62,6 @@ if __name__ == '__main__':
     import cupy
 
     cupy.cuda.Device(5).use()
-    res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8,
-                       target_dir='/mnt/lustre/home/lgj/data')
+    # res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8)
+    res = pipeline.compute('20210101', '20210110', universe='ALL', n_blocks=8)
     print(res)

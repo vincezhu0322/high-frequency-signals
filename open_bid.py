@@ -32,7 +32,7 @@ def open_bid(cxt):
     tensity.columns = ['code', 'open_bid_tensity']
     res = ratio.merge(tensity, on='code', how='left')
     res['time_flag'] = 100000
-    return res
+    return res.set_index(['code', 'time_flag'])
 
 
 pipeline = HftPipeline('ti6_open_bid', include_trans=True)
@@ -42,8 +42,7 @@ pipeline.gen_factors(["open_bid_ratio", "open_bid_tensity"])
 
 if __name__ == '__main__':
     import cupy
-    cupy.cuda.Device(5).use()
-    res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8,
-                       target_dir='/mnt/lustre/home/lgj/data')
-    print(res)
+    # res = pipeline.compute('20210101', '20210104', universe='ALL', n_blocks=8, target_dir='/mnt/lustre/home/lgj/data')
+    # print(res)
+    pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8, target_dir='/mnt/lustre/home/lgj/data')
 

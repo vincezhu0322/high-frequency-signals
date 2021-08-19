@@ -36,3 +36,4 @@ pipeline.gen_factors(["big_pull", "big_net"])
 if __name__ == '__main__':
     res = pipeline.compute(start_ds='20210322', end_ds='20210322', universe='ALL', n_blocks=1)
     print(res)
+    print(res)
