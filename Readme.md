@@ -29,10 +29,10 @@
 |25.| 开盘买入意愿 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$|④|刻画开盘主动买入意愿|日频|
 |26.| 大单资金净流入率 | $`(\sum_{i=1}^{N}Amt_i\cdot{I_{r_i>0,i\in{IdxSet}}}-\sum_{i=1}^{N}Amt_i\cdot{I_{r_i<0,i\in{IdxSet}}})\over\sum_{i=1}^{N}Amt_i`$ |⑤| 同18|日频|trans|
 |27.| 买盘集中度 | $`\sum_{k=1}^{N_{i,t}}买单成交金额_{i,t,k}^2\over总成交金额_{i,t}^2`$ |⑥|刻画买盘强度|1min|trans|
-|28.| 趋势占比 | $`close_t-close_{t-1}\over\sum_{j\in{t}}\vert{p_j-p_{j-1}}\vert`$|⑦|刻画股价的趋势强度|1min|trans|
-|29.| Amihud非流动性 |$`\sum_{j\in{t}}{r_j\over{Amt_j}}`$|⑦|刻画流动性，流动性越低，股价越容易被交易行为影响|1min|trans|
-|30.|帕累托|$V_{1\over4}\over{V_{3\over4}}$|⑧|刻画委托量衰减速度|日频|order|
-|31.|信息分布均匀度|$std(\sum_{j=1}^Nr_{i,j,n}^2)\over{mean(\sum_{j=1}^Nr_{i,j,n}^2)}$|⑨|在EMH中，股价的波动完全等于信息流的波动|日频|trans|
+|28.| 趋势 | $`close_t-close_{t-1}\over\sum_{j\in{t}}\vert{p_j-p_{j-1}}\vert`$|⑦|刻画股价的趋势强度|1min|trans|
+|29.| Amihud非流动性 |$`\sum_{j\in{t}}{\vert{r_j}\vert\over{Amt_j}}`$|⑦|刻画流动性，流动性越低，股价越容易被交易行为影响|1min|trans|
+|30.|帕累托|$`V_{1\over4}\over{V_{3\over4}}`$|⑧|刻画委托量衰减速度|日频|order|
+|31.|信息分布均匀度|$`std(\sum_{j=1}^Nr_{i,j,n}^2)\over{mean(\sum_{j=1}^Nr_{i,j,n}^2)}`$|⑨|在EMH中，股价的波动完全等于信息流的波动|日频|trans|
 
 ① 海通证券选股因子系列研究（七十三）    
 ② 海通证券选股因子系列研究（七十二）    
