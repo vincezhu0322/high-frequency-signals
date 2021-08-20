@@ -6,7 +6,7 @@ from hft_signal_maker.hft_pipeline import HftPipeline
 
 
 def get_trend(cxt):
-    trans = cxt.get_trans(calculate_delta=True)
+    trans = cxt.get_trans(calculate_delta=True, time_flag_freq='5min')
     trans['abs_delta_p'] = trans.delta_price.abs()
     sigma_diff = trans.groupby(['code', 'time_flag']).abs_delta_p.sum().reset_index()
     sigma_diff = sigma_diff.rename(columns={'abs_delta_p': 'sigma_diff'})
@@ -23,6 +23,11 @@ def get_trend(cxt):
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('trans_trend', include_trans=True)
 pipeline.add_block_step(get_trend)
 pipeline.gen_factors(["trend", "amihud"])
+
+
+if __name__ == '__main__':
+    res = pipeline.compute(start_ds='20210630', end_ds='20210630', universe='ALL', n_blocks=1)
+    print(res)

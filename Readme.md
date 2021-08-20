@@ -19,7 +19,7 @@
 |15.| 下行波动占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sqrt{N}\sum_{j=1}^Nr_{i,j,n}^2\cdot{I_{r<0}}\over{\sum_{j=1}^Nr_{i,j,n}^2}}`$, 参数意义与前一个因子相同 |④| 下行风险大的股票具有更高的风险溢价 | 1min| trans|
 |16.| 尾盘成交占比 |$`{1\over{T}}\sum_{n=t}^{t-T+1}{Vol_{i,14:30-15:00,j}\over{Vol_{i,j,n}}}`$|④| 尾盘散户和游资多 |日频| snap|
 |17.| 开盘净委买增额占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}委买增加量_{i,j,n}-委卖增加量_{i,j,n}\over{成交量_{i,\cdot,n}}}`$ |④|开盘信息交易者多|日频| snap|
-|18.|高频量价相关性|$corr(v_{i,j,n},p_{i,j,n})$|⑦|基本统计量|1min|trans|
+|18.|高频量价相关性|$`corr(v_{i,j,n},p_{i,j,n})`$|⑦|基本统计量|1min|trans|
 |19.| 改进量价 | $`{1\over{T}}\sum_{n=t}^{t-T+1}corr(Last_{i,j,n}, {Vol_{i,j,n}\over\sum_jVol_{i,j,n}})`$ |④| 量价背离 | 1min| trans |
 |20.| 改进反转 | $`\prod_{n=t}^{t-T+1}{Last_{i,j,n}\over{Last_{i,10:00,n}}}-1`$ |④| 剔除隔夜跳空影响的反转因子 | 1min| snap|
 |21.| 平均单笔流出占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j=1}^NAmt_{i,j,n}\cdot{I_{r<0}}/\sum_{j=1}^NTrdNum_{i,j,n}\cdot{I_{r<0}}\over\sum_{j=1}^NAmt_{i,j,n}/\sum_{j=1}^NTrdNum_{i,j,n}}`$ |④| 捕捉大资金抄底行为 | 1min | snap|

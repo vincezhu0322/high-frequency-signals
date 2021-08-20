@@ -6,8 +6,7 @@ from hft_signal_maker.hft_pipeline import HftPipeline
 
 
 def high_frequency_description(cxt):
-    trans = cxt.get_trans().reset_index()
-    print(trans)
+    trans = cxt.get_trans(time_flag_freq='5min').reset_index()
     r = trans['return']
     trans['rsqr'] = r ** 2
     trans['rcube'] = r ** 3
@@ -43,7 +42,7 @@ def high_frequency_description(cxt):
     cor[(cor.hft_corr > 1) | (cor.hft_corr < -1)] = 0
     res = res.merge(cor, on=['code', 'time_flag'], how='left')
     trans['anchor'] = 0
-    trans.loc[trans['bsFlag'] == 1, 'anchor'] = 1
+    trans.loc[trans['bs_flag'] == 1, 'anchor'] = 1
     trans['amount'] = trans.price * trans.volume
     trans['bid_sqr'] = (trans.amount * trans.anchor) ** 2
     trans['amount_sqr'] = trans.amount ** 2
@@ -54,14 +53,13 @@ def high_frequency_description(cxt):
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('trans_description', include_trans=True)
 pipeline.add_block_step(high_frequency_description)
 pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "downward_ratio", "bid_concentration"])
 
+
 if __name__ == '__main__':
     import cupy
-
-    cupy.cuda.Device(5).use()
     # res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8)
-    res = pipeline.compute('20210101', '20210110', universe='ALL', n_blocks=8)
+    res = pipeline.compute('20210101', '20210104', universe='ALL', n_blocks=8)
     print(res)
