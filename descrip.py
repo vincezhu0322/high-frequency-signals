@@ -6,10 +6,8 @@ from hft_signal_maker.hft_pipeline import HftPipeline
 
 
 def high_frequency_description(cxt):
-    trans = cxt.get_trans().reset_index()
-    preprice = trans.groupby('code').price.shift(1).reset_index(drop=True)
-    r = ((trans.price - preprice) / trans.price).fillna(0) * 100
-    trans['return'] = r
+    trans = cxt.get_trans(time_flag_freq='5min').reset_index()
+    r = trans['return']
     trans['rsqr'] = r ** 2
     trans['rcube'] = r ** 3
     trans['rquar'] = r ** 4

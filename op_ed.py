@@ -1,3 +1,7 @@
+import sys
+sys.path.append('/mnt/lustre/app/qllib')
+
+
 import cudf
 from hft_signal_maker.hft_pipeline import HftPipeline
 
@@ -19,3 +23,8 @@ def op_ed_ratio(cxt):
 pipeline = HftPipeline('op_ed_ratio', include_snap=True)
 pipeline.add_block_step(op_ed_ratio)
 pipeline.gen_factors(["op_vol_ratio", "op_net_bid_ratio", "ed_vol_ratio"])
+
+
+if __name__ == '__main__':
+    res = pipeline.compute('20210101', '20210104', universe='ALL', n_blocks=8)
+    print(res)

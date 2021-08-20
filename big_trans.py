@@ -6,7 +6,7 @@ from hft_signal_maker.hft_pipeline import HftPipeline
 
 
 def big_trans(cxt):
-    trans = cxt.get_trans().reset_index()
+    trans = cxt.get_trans(time_flag_freq='5min').reset_index()
     preprice = trans.groupby('code').price.shift(1).reset_index(drop=True)
     trans['return'] = ((trans.price - preprice) / trans.price).fillna(0)
     trans['amount'] = trans.price * trans.volume
@@ -25,7 +25,7 @@ def big_trans(cxt):
     net = (big.groupby('code').net_amount.sum() / trans.groupby('code').amount.sum()).reset_index()
     net.columns = ['code', 'big_net']
     res = res.merge(net, on='code', how='outer')
-    res['time_flag'] = '150000'
+    res['time_flag'] = 'daily'
     return res
 
 

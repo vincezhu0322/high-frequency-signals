@@ -6,7 +6,7 @@ from hft_signal_maker.hft_pipeline import HftPipeline
 
 
 def reverse(cxt):
-    snap = cxt.get_snap(time_flag_freq='1min')
+    snap = cxt.get_snap(time_flag_freq='5min')
     snap = snap[(snap.time >= 92500000) & (snap.time <= 150300000)]
     snap = snap.sort_values(['code', 'time']).reset_index(drop=True)
     close10 = snap[snap.time <= 100000000].groupby(['code']).last.nth(-1).reset_index()
