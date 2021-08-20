@@ -32,6 +32,6 @@ def reverse(cxt):
     return res
 
 
-pipeline = HftPipeline('snap', include_snap=True)
+pipeline = HftPipeline('reverse', include_snap=True)
 pipeline.add_block_step(reverse)
 pipeline.gen_factors(["reverse", "chaodi"])

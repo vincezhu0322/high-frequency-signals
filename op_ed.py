@@ -16,6 +16,6 @@ def op_ed_ratio(cxt):
     return res
 
 
-pipeline = HftPipeline('snap', include_snap=True)
+pipeline = HftPipeline('op_ed_ratio', include_snap=True)
 pipeline.add_block_step(op_ed_ratio)
 pipeline.gen_factors(["op_vol_ratio", "op_net_bid_ratio", "ed_vol_ratio"])

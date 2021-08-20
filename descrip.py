@@ -34,17 +34,25 @@ def high_frequency_description(cxt):
     trans['vol_ratio'] = trans.volume / trans.vol_sum
     v1 = trans.groupby(['code', 'time_flag']).price.var().sort_index()
     v2 = trans.groupby(['code', 'time_flag']).vol_ratio.var().sort_index()
+    v3 = trans.groupby(['code', 'time_flag']).volume.var().sort_index()
     n = trans.groupby(['code', 'time_flag']).vol_ratio.count().sort_index()
     m1 = trans.groupby(['code', 'time_flag']).price.mean().sort_index()
     m2 = trans.groupby(['code', 'time_flag']).vol_ratio.mean().sort_index()
-    trans['pxv'] = trans.price * trans.vol_ratio
-    m3 = trans.groupby(['code', 'time_flag']).pxv.mean().sort_index()
+    m4 = trans.groupby(['code', 'time_flag']).volume.mean().sort_index()
+    trans['pxvr'] = trans.price * trans.vol_ratio
+    trans['pxv'] = trans.price * trans.volume
+    m3 = trans.groupby(['code', 'time_flag']).pxvr.mean().sort_index()
+    m5 = trans.groupby(['code', 'time_flag']).pxv.mean().sort_index()
     cor = ((n / (n - 1)) * (m3 - m1 * m2) / (v1 * v2) ** 0.5).fillna(0).sort_index()
-    cor = cor.reset_index().rename(columns={0: 'hft_corr'})
-    cor[(cor.hft_corr > 1) | (cor.hft_corr < -1)] = 0
+    cor = cor.reset_index().rename(columns={0: 'adj_corr'})
+    cor[(cor.adj_corr > 1) | (cor.adj_corr < -1)] = 0
+    cor2 = ((n / (n - 1)) * (m5 - m1 * m4) / (v1 * v3) ** 0.5).fillna(0).sort_index()
+    cor2 = cor2.reset_index().rename(columns={0: 'hft_corr'})
+    cor2[(cor2.hft_corr > 1) | (cor2.hft_corr < -1)] = 0
     res = res.merge(cor, on=['code', 'time_flag'], how='left')
+    res = res.merge(cor2, on=['code', 'time_flag'], how='left')
     trans['anchor'] = 0
-    trans.loc[trans['bsFlag'] == 1, 'anchor'] = 1
+    trans.loc[trans['bs_flag'] == 1, 'anchor'] = 1
     trans['amount'] = trans.price * trans.volume
     trans['bid_sqr'] = (trans.amount * trans.anchor) ** 2
     trans['amount_sqr'] = trans.amount ** 2
@@ -55,14 +63,13 @@ def high_frequency_description(cxt):
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('hft_descrip', include_trans=True)
 pipeline.add_block_step(high_frequency_description)
-pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "downward_ratio", "bid_concentration"])
+pipeline.gen_factors(["vola", "skew", "kurt", "hft_corr", "adj_corr", "downward_ratio", "bid_concentration"])
 
 if __name__ == '__main__':
     import cupy
 
     cupy.cuda.Device(5).use()
-    res = pipeline.run('20210101', '20210301', universe='ALL', n_blocks=8,
-                       target_dir='/mnt/lustre/home/lgj/data')
+    res = pipeline.compute('20210322', '20210322', universe='ALL', n_blocks=8)
     print(res)

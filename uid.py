@@ -15,6 +15,6 @@ def get_uid(cxt):
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('uid', include_trans=True)
 pipeline.add_block_step(get_uid)
 pipeline.gen_factors(["uid"])

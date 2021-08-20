@@ -23,6 +23,6 @@ def get_trend(cxt):
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('trend', include_trans=True)
 pipeline.add_block_step(get_trend)
 pipeline.gen_factors(["trend", "amihud"])

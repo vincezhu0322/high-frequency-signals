@@ -25,11 +25,11 @@ def big_trans(cxt):
     net = (big.groupby('code').net_amount.sum() / trans.groupby('code').amount.sum()).reset_index()
     net.columns = ['code', 'big_net']
     res = res.merge(net, on='code', how='outer')
-    res['time_flag'] = 'daily'
+    res['time_flag'] = '150000'
     return res
 
 
-pipeline = HftPipeline('trans', include_trans=True)
+pipeline = HftPipeline('big_trans', include_trans=True)
 pipeline.add_block_step(big_trans)
 pipeline.gen_factors(["big_pull", "big_net"])
 
