@@ -5,9 +5,9 @@ sys.path.append('/mnt/lustre/app/qllib')
 from hft_signal_maker.hft_pipeline import HftPipeline
 
 
-def get_trander(cxt):
-    trander = cxt.get_trans_with_order(time_flag_freq='1min')
-    trander = trander[trander.trans_type == 1]
+def get_op_trander(cxt):
+    trander = cxt.get_trans_with_order(time_flag_freq='30min')
+    trander = trander[(trander.trans_type == 1) & (trander.time_flag == 100000)]
     trander['amount'] = trander.price * trander.volume
     trander['bid_volume'] = trander.bid_volume.fillna(0)
     trander['ask_volume'] = trander.ask_volume.fillna(0)
@@ -40,27 +40,25 @@ def get_trander(cxt):
     trander['big_bid_amount'] = trander.big_bid * trander.amount
     trander['big_ask_amount'] = trander.big_ask * trander.amount
     trander['net_big_amount'] = trander.big_bid_amount - trander.big_ask_amount
-    big_bid_ratio = (trander[trander.big_bid == 1].groupby(['code', 'time_flag']).amount.sum() / trander.groupby(
-        ['code', 'time_flag']).amount.sum()).reset_index().rename(columns={'amount': 'big_bid_ratio'}).fillna(0)
-    big_bid_tensity = (trander.groupby(['code', 'time_flag']).big_bid_amount.mean() / trander.groupby(
-        ['code', 'time_flag']).big_bid_amount.std()).reset_index().rename(
-        columns={'big_bid_amount': 'big_bid_tensity'}).fillna(
-        0)
-    res = big_bid_ratio.merge(big_bid_tensity, on=['code', 'time_flag'], how='outer').fillna(0)
-    net_ratio = (trander.groupby(['code', 'time_flag']).net_big_amount.sum() / trander.groupby(
-        ['code', 'time_flag']).amount.sum()).reset_index().rename(columns={0: 'big_net_bid_ratio'})
-    net_tensity = (trander.groupby(['code', 'time_flag']).net_big_amount.mean() / trander.groupby(
-        ['code', 'time_flag']).net_big_amount.std()).reset_index().rename(
-        columns={'net_big_amount': 'big_net_bid_tensity'})
-    net = net_ratio.merge(net_tensity, on=['code', 'time_flag'], how='outer').fillna(0)
-    res = res.merge(net, on=['code', 'time_flag'], how='outer')
+    big_bid_ratio = (trander[trander.big_bid == 1].groupby(['code']).amount.sum() / trander.groupby(
+        ['code']).amount.sum()).reset_index().rename(columns={'amount': 'op_big_bid_ratio'}).fillna(0)
+    big_bid_tensity = (trander.groupby(['code']).big_bid_amount.mean() / trander.groupby(
+        ['code']).big_bid_amount.std()).reset_index().rename(columns={'big_bid_amount': 'op_big_bid_tensity'}).fillna(0)
+    res = big_bid_ratio.merge(big_bid_tensity, on=['code'], how='outer').fillna(0)
+    net_ratio = (trander.groupby(['code']).net_big_amount.sum() / trander.groupby(
+        ['code']).amount.sum()).reset_index().rename(columns={0: 'op_big_net_bid_ratio'})
+    net_tensity = (trander.groupby(['code']).net_big_amount.mean() / trander.groupby(
+        ['code']).net_big_amount.std()).reset_index().rename(columns={'net_big_amount': 'op_big_net_bid_tensity'})
+    net = net_ratio.merge(net_tensity, on=['code'], how='outer').fillna(0)
+    res = res.merge(net, on=['code'], how='outer')
+    res['time_flag'] = 100000
     return res
 
 
-pipeline = HftPipeline('big_order', include_trans_with_order=True)
-pipeline.add_block_step(get_trander)
-pipeline.gen_factors(['big_bid_ratio', 'big_bid_tensity', 'big_net_bid_ratio', 'big_net_bid_tensity'])
+pipeline = HftPipeline('op_big_order', include_trans_with_order=True)
+pipeline.add_block_step(get_op_trander)
+pipeline.gen_factors(['op_big_bid_ratio', 'op_big_bid_tensity', 'op_big_net_bid_ratio', 'op_big_net_bid_tensity'])
 
 if __name__ == '__main__':
     res = pipeline.compute(start_ds='20210322', end_ds='20210322', universe=['603501.SH', '600268.SH', '002667.SZ'],
-                           n_blocks=8).reset_index()
+                           n_blocks=1).reset_index()
