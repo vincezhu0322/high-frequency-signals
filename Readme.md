@@ -33,7 +33,7 @@
 |29.| 买盘集中度 | $`\sum_{k=1}^{N_{i,t}}买单成交金额_{i,t,k}^2\over总成交金额_{i,t}^2`$ |⑥|刻画买盘强度|1min|trans|hft_descrip|bid_concentration|
 |30.| 趋势 | $`close_t-close_{t-1}\over\sum_{j\in{t}}\vert{p_j-p_{j-1}}\vert`$|⑦|刻画股价的趋势强度|1min|trans|trend|trend|
 |31.| Amihud非流动性 |$`\sum_{j\in{t}}{\vert{r_j}\vert\over{Amt_j}}`$|⑦|刻画流动性，流动性越低，股价越容易被交易行为影响|1min|trans|trend|amihud|
-|32.|帕累托|$`V_{1\over4}\over{V_{3\over4}}`$|⑧|刻画委托量衰减速度|日频|order(沪市缺直接成交的委托)|pareto|pareto|
+|32.|帕累托|$`V_{1\over4}\over{V_{3\over4}}`$|⑧|刻画委托量衰减速度|日频|order|pareto|pareto|
 |33.|信息分布均匀度|$`std(\sum_{j=1}^Nr_{i,j,n}^2)\over{mean(\sum_{j=1}^Nr_{i,j,n}^2)}`$|⑨|在EMH中，股价的波动完全等于信息流的波动|日频|trans|uid|uid|
 
 ① 海通证券选股因子系列研究（七十三）    
