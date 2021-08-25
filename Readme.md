@@ -27,13 +27,13 @@
 |23.| 大单推动涨幅 | $`\prod_{n=t}^{t-T+1}\prod(1+r_{i,j,n}\cdot{I_{j\in{IdxSet}}})-1`$, IdxSet=当日平均单笔成交金额最大的30%的K线的序号 |④| 多空博弈激烈，未来反转加强 | 日频| trans|big_trans|big_pull|
 |24.| 开盘净主买占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n}\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$ |④|刻画开盘主动买入|日频| trans|ti6_open_bid|op_bid_ratio|
 |25.| 开盘净主买强度 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{mean_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n})\over{std_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n})}}`$|④|刻画开盘主动买入强度|日频| trans|ti6_open_bid|op_bid_tensity|
-|26.|买入意愿|${\sum_{j\in{t}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})}\over\sum_{j\in{t}}成交额_{i,j,n}}$|④|刻画买入意愿|1min|
+|26.|买入意愿|$`{\sum_{j\in{t}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{t}}成交额_{i,j,n}}`$|④|刻画买入意愿|1min|order, trans_with_order|buy_will|buy_will|
 |27.| 开盘买入意愿 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$|④|刻画开盘主动买入意愿|日频|
 |28.| 大单资金净流入率 | $`(\sum_{i=1}^{N}Amt_i\cdot{I_{r_i>0,i\in{IdxSet}}}-\sum_{i=1}^{N}Amt_i\cdot{I_{r_i<0,i\in{IdxSet}}})\over\sum_{i=1}^{N}Amt_i`$ |⑤| 同18|日频|trans|big_trans|big_net|
 |29.| 买盘集中度 | $`\sum_{k=1}^{N_{i,t}}买单成交金额_{i,t,k}^2\over总成交金额_{i,t}^2`$ |⑥|刻画买盘强度|1min|trans|hft_descrip|bid_concentration|
 |30.| 趋势 | $`close_t-close_{t-1}\over\sum_{j\in{t}}\vert{p_j-p_{j-1}}\vert`$|⑦|刻画股价的趋势强度|1min|trans|trend|trend|
 |31.| Amihud非流动性 |$`\sum_{j\in{t}}{\vert{r_j}\vert\over{Amt_j}}`$|⑦|刻画流动性，流动性越低，股价越容易被交易行为影响|1min|trans|trend|amihud|
-|32.|帕累托|$`V_{1\over4}\over{V_{3\over4}}`$|⑧|刻画委托量衰减速度|日频|order|pareto|pareto|
+|32.|帕累托|$`V_{1\over4}\over{V_{3\over4}}`$|⑧|刻画委托量衰减速度|日频|order, trans_with_order|pareto|pareto|
 |33.|信息分布均匀度|$`std(\sum_{j=1}^Nr_{i,j,n}^2)\over{mean(\sum_{j=1}^Nr_{i,j,n}^2)}`$|⑨|在EMH中，股价的波动完全等于信息流的波动|日频|trans|uid|uid|
 
 ① 海通证券选股因子系列研究（七十三）    

@@ -39,5 +39,5 @@ pipeline.gen_factors(["pareto"])
 
 
 if __name__ == '__main__':
-    res = pipeline.compute(start_ds='20210630', end_ds='20210630', universe='ALL', n_blocks=1).reset_index()
+    res = pipeline.compute(start_ds='20210630', end_ds='20210630', universe=['603501.SH', '600268.SH', '002667.SZ'], n_blocks=1).reset_index()
     print(res)
