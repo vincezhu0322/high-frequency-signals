@@ -28,7 +28,7 @@
 |24.| 开盘净主买占比 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n}\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$ |④|刻画开盘主动买入|日频| trans|ti6_open_bid|op_bid_ratio|
 |25.| 开盘净主买强度 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{mean_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n})\over{std_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}-主动卖出成交额_{i,j,n})}}`$|④|刻画开盘主动买入强度|日频| trans|ti6_open_bid|op_bid_tensity|
 |26.|买入意愿|$`{\sum_{j\in{t}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{t}}成交额_{i,j,n}}`$|④|刻画买入意愿|1min|order, trans_with_order|buy_will|buy_will|
-|27.| 开盘买入意愿 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$|④|刻画开盘主动买入意愿|日频|
+|27.| 开盘买入意愿 | $`{1\over{T}}\sum_{n=t}^{t-T+1}{\sum_{j\in{9:30-10:00}}(主动买入成交额_{i,j,n}+委买增加量_{i,j,n}-主动卖出成交额_{i,j,n}-委卖增加量_{i,j,n})\over\sum_{j\in{9:30-10:00}}成交额_{i,j,n}}`$|④|刻画开盘主动买入意愿|日频|order, trans_with_order|op_buy_will|op_buy_will|
 |28.| 大单资金净流入率 | $`(\sum_{i=1}^{N}Amt_i\cdot{I_{r_i>0,i\in{IdxSet}}}-\sum_{i=1}^{N}Amt_i\cdot{I_{r_i<0,i\in{IdxSet}}})\over\sum_{i=1}^{N}Amt_i`$ |⑤| 同18|日频|trans|big_trans|big_net|
 |29.| 买盘集中度 | $`\sum_{k=1}^{N_{i,t}}买单成交金额_{i,t,k}^2\over总成交金额_{i,t}^2`$ |⑥|刻画买盘强度|1min|trans|hft_descrip|bid_concentration|
 |30.| 趋势 | $`close_t-close_{t-1}\over\sum_{j\in{t}}\vert{p_j-p_{j-1}}\vert`$|⑦|刻画股价的趋势强度|1min|trans|trend|trend|
