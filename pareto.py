@@ -37,8 +37,6 @@ pipeline = HftPipeline('pareto', include_order=True, include_trans_with_order=Tr
 pipeline.add_block_step(get_pareto)
 pipeline.gen_factors(["pareto"])
 
-res = pipeline.compute(start_ds='20210322', end_ds='20210322', universe=['603501.SH', '600268.SH', '002667.SZ'],
-                       n_blocks=1).reset_index()
 
 if __name__ == '__main__':
     res = pipeline.compute(start_ds='20210630', end_ds='20210630', universe='ALL', n_blocks=1).reset_index()
